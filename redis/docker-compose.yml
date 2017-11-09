@@ -10,6 +10,10 @@ services:
       - 6379:6379
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup
+    networks:
+      default:
+        aliases:
+          - redis-server
 networks:
   default:
     external:
