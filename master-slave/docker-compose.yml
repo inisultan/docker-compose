@@ -1,0 +1,30 @@
+version: '3'
+services:
+  postgresql96-master:
+    image: 055378290905.dkr.ecr.ap-southeast-1.amazonaws.com/postgresql96-master
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+    ports:
+      - 5433:5432
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup
+
+  postgresql96-slave:
+    image: 055378290905.dkr.ecr.ap-southeast-1.amazonaws.com/postgresql96-slave
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+    ports:
+      - 5432
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup
+    links:
+      - postgresql96-master:master
+
+networks:
+  default:
+    external:
+      name: local-net

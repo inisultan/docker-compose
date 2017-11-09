@@ -1,0 +1,16 @@
+version: '3'
+services:
+  redis-server:
+    image: 055378290905.dkr.ecr.ap-southeast-1.amazonaws.com/redis-server
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+    ports:
+      - 6379:6379
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup
+networks:
+  default:
+    external:
+      name: local-net
