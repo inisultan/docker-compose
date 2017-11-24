@@ -1,0 +1,18 @@
+version: '3'
+services:
+  rails-server:
+    image: 055378290905.dkr.ecr.ap-southeast-1.amazonaws.com/nginx-passenger-mr
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+    ports:
+      - 8080:80
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup
+
+
+networks:
+  default:
+    external:
+      name: local-net
