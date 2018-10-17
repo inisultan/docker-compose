@@ -1,0 +1,20 @@
+version: '3'
+services:
+  moka-service-inventory:
+    image: 055378290905.dkr.ecr.ap-southeast-1.amazonaws.com/moka-service-inventory:latest
+    env_file:
+      - ${ENV}.env
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+    ports:
+      - 5000:5000
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup
+
+
+networks:
+  default:
+    external:
+      name: local-net
