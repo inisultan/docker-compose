@@ -1,6 +1,6 @@
 version: '3'
 services:
-  moka-service-payment:
+  payment:
     image: 055378290905.dkr.ecr.ap-southeast-1.amazonaws.com/moka-service-payment:test-include-newrelic
     env_file:
       - ${ENV}.env
