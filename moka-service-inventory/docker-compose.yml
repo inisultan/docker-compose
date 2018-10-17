@@ -1,6 +1,6 @@
 version: '3'
 services:
-  moka-service-inventory:
+  inventory:
     image: 055378290905.dkr.ecr.ap-southeast-1.amazonaws.com/moka-service-inventory:latest
     env_file:
       - ${ENV}.env
