@@ -17,8 +17,8 @@ services:
       - POSTGRESQL_SYNCHRONOUS_COMMIT_MODE=on
       - POSTGRESQL_NUM_SYNCHRONOUS_REPLICAS=10
     volumes:
-      - /Users/sultan/Documents/code/postgresql-data:/bitnami
-      - /Users/sultan/Documents/code/postgresql-data/postgresql/conf:/bitnami/postgresql/conf
+      - /Users/muhammadsoultani/Documents/code/dockercompose/master-slave/postgresql-data:/bitnami
+      - /Users/muhammadsoultani/Documents/code/dockercompose/master-slave/postgresql-data/postgresql/conf:/bitnami/postgresql/conf
   postgresql-slave:
     image: 'bitnami/postgresql:11-centos-7'
     ports:
@@ -33,4 +33,4 @@ services:
       - POSTGRESQL_PASSWORD=my_password
       - POSTGRESQL_MASTER_PORT_NUMBER=5432
     volumes:
-      - /Users/sultan/Documents/code/postgresql-data/postgresql/conf:/bitnami/postgresql/conf
+      - /Users/muhammadsoultani/Documents/code/dockercompose/master-slave/postgresql-data/postgresql/conf:/bitnami/postgresql/conf

@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  mysql-master:
+    image: 'bitnami/mysql:latest'
+    ports:
+      - 3307:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=master_root_password
+      - MYSQL_REPLICATION_MODE=master
+      - MYSQL_REPLICATION_USER=my_repl_user
+      - MYSQL_REPLICATION_PASSWORD=my_repl_password
+      - MYSQL_USER=my_user
+      - MYSQL_PASSWORD=my_password
+      - MYSQL_DATABASE=my_database
+    volumes:
+      - /Users/muhammadsoultani/Documents/code/dockercompose/mysql-master-slave/data:/bitnami/mysql/data
+      - /Users/muhammadsoultani/Documents/code/dockercompose/mysql-master-slave/my_custom.cnf:/opt/bitnami/mysql/conf/my_custom.cnf:ro
+  mysql-slave:
+    image: 'bitnami/mysql:latest'
+    ports:
+      - 3308-3309:3306
+    depends_on:
+      - mysql-master
+    environment:
+      - MYSQL_REPLICATION_MODE=slave
+      - MYSQL_REPLICATION_USER=my_repl_user
+      - MYSQL_REPLICATION_PASSWORD=my_repl_password
+      - MYSQL_MASTER_HOST=mysql-master
+      - MYSQL_MASTER_PORT_NUMBER=3306
+      - MYSQL_MASTER_ROOT_PASSWORD=master_root_password
+    volumes:
+      - /Users/muhammadsoultani/Documents/code/dockercompose/mysql-master-slave/my_custom.cnf:/opt/bitnami/mysql/conf/my_custom.cnf:ro
+# $ docker run --name mysql-master \
+#   -e MYSQL_ROOT_PASSWORD=master_root_password \
+#   -e MYSQL_REPLICATION_MODE=master \
+#   -e MYSQL_REPLICATION_USER=my_repl_user \
+#   -e MYSQL_REPLICATION_PASSWORD=my_repl_password \
+#   -e MYSQL_USER=my_user \
+#   -e MYSQL_PASSWORD=my_password \
+#   -e MYSQL_DATABASE=my_database \
+#   bitnami/mysql:latest
+#
+#   $ docker run --name mysql-slave --link mysql-master:master \
+#   -e MYSQL_REPLICATION_MODE=slave \
+#   -e MYSQL_REPLICATION_USER=my_repl_user \
+#   -e MYSQL_REPLICATION_PASSWORD=my_repl_password \
+#   -e MYSQL_MASTER_HOST=master \
+#   -e MYSQL_MASTER_ROOT_PASSWORD=master_root_password \
+#   bitnami/mysql:latest
