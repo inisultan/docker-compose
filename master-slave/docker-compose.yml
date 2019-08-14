@@ -34,3 +34,8 @@ services:
       - POSTGRESQL_MASTER_PORT_NUMBER=5432
     volumes:
       - /Users/muhammadsoultani/Documents/code/dockercompose/master-slave/postgresql-data/postgresql/conf:/bitnami/postgresql/conf
+
+networks:
+  default:
+    external:
+      name: local-net

@@ -9,3 +9,8 @@ services:
       MONGO_INITDB_DATABASE: testdb
       MONGO_INITDB_ROOT_USERNAME: testuser
       MONGO_INITDB_ROOT_PASSWORD: testpassword
+      
+networks:
+  default:
+    external:
+      name: local-net

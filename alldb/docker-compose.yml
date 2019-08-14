@@ -1,0 +1,98 @@
+version: '3'
+
+services:
+
+  # POSTGRESQL
+  postgresql-master:
+    image: 'bitnami/postgresql:11-centos-7'
+    ports:
+      - 5433:5432
+    volumes:
+      - 'postgresql_master_data:/bitnami'
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=master
+      - POSTGRESQL_REPLICATION_USER=repl_user
+      - POSTGRESQL_REPLICATION_PASSWORD=repl_password
+      - POSTGRESQL_USERNAME=my_user
+      - POSTGRESQL_PASSWORD=my_password
+      - POSTGRESQL_DATABASE=my_database
+      - POSTGRESQL_SYNCHRONOUS_COMMIT_MODE=on
+      - POSTGRESQL_NUM_SYNCHRONOUS_REPLICAS=10
+    volumes:
+      - ${LOCAL_PATH}/dockercompose/master-slave/postgresql-data:/bitnami
+      - ${LOCAL_PATH}/dockercompose/master-slave/postgresql-data/postgresql/conf:/bitnami/postgresql/conf
+  postgresql-slave:
+    image: 'bitnami/postgresql:11-centos-7'
+    ports:
+      - 5434-5435:5432
+    depends_on:
+      - postgresql-master
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=slave
+      - POSTGRESQL_REPLICATION_USER=repl_user
+      - POSTGRESQL_REPLICATION_PASSWORD=repl_password
+      - POSTGRESQL_MASTER_HOST=postgresql-master
+      - POSTGRESQL_PASSWORD=my_password
+      - POSTGRESQL_MASTER_PORT_NUMBER=5432
+    volumes:
+      - ${LOCAL_PATH}/dockercompose/master-slave/postgresql-data/postgresql/conf:/bitnami/postgresql/conf
+
+  #MYSQL
+  mysql-master:
+    image: 'bitnami/mysql:5.7'
+    ports:
+      - 3307:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=master_root_password
+      - MYSQL_REPLICATION_MODE=master
+      - MYSQL_REPLICATION_USER=my_repl_user
+      - MYSQL_REPLICATION_PASSWORD=my_repl_password
+      - MYSQL_USER=my_user
+      - MYSQL_PASSWORD=my_password
+      - MYSQL_DATABASE=my_database
+    volumes:
+      - ${LOCAL_PATH}/dockercompose/mysql-master-slave/data:/bitnami/mysql/data
+      - ${LOCAL_PATH}/dockercompose/mysql-master-slave/my_custom.cnf:/opt/bitnami/mysql/conf/my_custom.cnf:ro
+  mysql-slave:
+    image: 'bitnami/mysql:5.7'
+    ports:
+      - 3308-3309:3306
+    depends_on:
+      - mysql-master
+    environment:
+      - MYSQL_REPLICATION_MODE=slave
+      - MYSQL_REPLICATION_USER=my_repl_user
+      - MYSQL_REPLICATION_PASSWORD=my_repl_password
+      - MYSQL_MASTER_HOST=mysql-master
+      - MYSQL_MASTER_PORT_NUMBER=3306
+      - MYSQL_MASTER_ROOT_PASSWORD=master_root_password
+    volumes:
+      - ${LOCAL_PATH}/dockercompose/mysql-master-slave/my_custom.cnf:/opt/bitnami/mysql/conf/my_custom.cnf:ro
+
+  #MONGODB
+  mongodb:
+    image: 'mongo:latest'
+    ports:
+      - 27017-27019:27017-27019
+    environment:
+      MONGO_INITDB_DATABASE: testdb
+      MONGO_INITDB_ROOT_USERNAME: testuser
+      MONGO_INITDB_ROOT_PASSWORD: testpassword
+
+  #DEMO SERVICE
+  demo-service:
+    image: 'com.tix.template.demo.serviceApi/tix-demo-service-api-rdbms:0.0.1-release'
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql-slave
+      - postgresql-slave
+      - mongodb
+    env_file:
+      - ./${DB}.env
+
+
+networks:
+  default:
+    external:
+      name: local-net
