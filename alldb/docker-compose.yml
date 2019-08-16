@@ -87,7 +87,7 @@ services:
   mongodb-secondary:
     image: 'bitnami/mongodb:latest'
     ports:
-      - 27018-27020:27017-27019
+      - 27018-27020:27017
     depends_on:
       - mongodb-primary
     environment:
@@ -96,7 +96,7 @@ services:
       - MONGODB_PRIMARY_PORT_NUMBER=27017
       - MONGODB_PRIMARY_ROOT_PASSWORD=password123
       - MONGODB_REPLICA_SET_KEY=replicasetkey123
-      - MONGODB_ADVERTISED_HOSTNAME=mongodb-secondary
+      #- MONGODB_ADVERTISED_HOSTNAME=mongodb-secondary
 
   mongodb-arbiter:
     image: 'bitnami/mongodb:latest'
