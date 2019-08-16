@@ -1,0 +1,3 @@
+#!/bin/sh
+
+DB=MYSQL SERVICE=tix-demo-service-api-rdbms docker-compose up -d --scale mysql-slave=2

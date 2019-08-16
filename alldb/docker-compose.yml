@@ -112,7 +112,7 @@ services:
 
   #DEMO SERVICE
   demo-service:
-    image: 'com.tix.template.demo.serviceApi/tix-demo-service-api-mongo:0.0.1-release'
+    image: 'com.tix.template.demo.serviceApi/${SERVICE}:0.0.1-release'
     ports:
       - 8080:8080
     depends_on:

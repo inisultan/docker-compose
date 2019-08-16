@@ -1,0 +1,3 @@
+#!/bin/sh
+
+DB=POSTGRESQL SERVICE=tix-demo-service-api-rdbms docker-compose up -d --scale postgresql-slave=2
