@@ -112,7 +112,7 @@ services:
 
   #DEMO SERVICE
   demo-service:
-    image: 'com.tix.template.demo.serviceApi/${SERVICE}:0.0.1-release'
+    image: 'gcr.io/annular-catfish-250011/${SERVICE}:0.0.1-release'
     ports:
       - 8080:8080
     depends_on:
