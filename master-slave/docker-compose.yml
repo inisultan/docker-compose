@@ -22,7 +22,7 @@ services:
   postgresql-slave:
     image: 'bitnami/postgresql:11-centos-7'
     ports:
-      - '5432'
+      - 5434-5435:5432
     depends_on:
       - postgresql-master
     environment:
