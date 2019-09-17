@@ -1,0 +1,36 @@
+version: '3'
+services:
+  rabbit1:
+    image: harbur/rabbitmq-cluster
+    hostname: rabbit1
+    environment:
+      - ERLANG_COOKIE=abcdefg
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  rabbit2:
+    image: harbur/rabbitmq-cluster
+    hostname: rabbit2
+    links:
+      - rabbit1
+    environment:
+      - ERLANG_COOKIE=abcdefg
+      - CLUSTER_WITH=rabbit1
+      - ENABLE_RAM=true
+      - RAM_NODE=true
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+  rabbit3:
+    image: rabbitmq:3-management
+    ports:
+      - 15674:15672
+      - 5674:5672
+    networks:
+      default:
+        aliases:
+          - rabbitmq-server
+networks:
+  default:
+    external:
+      name: local-net
