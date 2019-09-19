@@ -72,7 +72,7 @@ services:
 
   #MONGODB
   mongodb-primary:
-    image: 'bitnami/mongodb:latest'
+    image: 'bitnami/mongodb:4.2.0'
     ports:
       - 27017:27017
     environment:
@@ -85,7 +85,7 @@ services:
       - MONGODB_ADVERTISED_HOSTNAME=mongodb-primary
 
   mongodb-secondary:
-    image: 'bitnami/mongodb:latest'
+    image: 'bitnami/mongodb:4.2.0'
     ports:
       - 27018-27020:27017
     depends_on:
@@ -99,7 +99,7 @@ services:
       #- MONGODB_ADVERTISED_HOSTNAME=mongodb-secondary
 
   mongodb-arbiter:
-    image: 'bitnami/mongodb:latest'
+    image: 'bitnami/mongodb:4.2.0'
     depends_on:
       - mongodb-primary
     environment:
