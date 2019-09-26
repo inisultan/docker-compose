@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  zookeeper:
+    image: 'bitnami/zookeeper:latest'
+    ports:
+     - '2181:2181'
+    environment:
+      - ZOO_ENABLE_AUTH=yes
+      - ALLOW_ANONYMOUS_LOGIN=yes
+      # - ZOO_SERVER_USERS=kafka
+      # - ZOO_SERVER_PASSWORDS=kafka_password
+  kafka:
+    image: 'bitnami/kafka:latest'
+    hostname: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ZOOKEEPER_USER=kafka
+      - KAFKA_ZOOKEEPER_PASSWORD=kafka_password
+      - KAFKA_INTER_BROKER_USER=interuser
+      - KAFKA_INTER_BROKER_PASSWORD=interpassword
+      - KAFKA_BROKER_USER=user
+      - KAFKA_BROKER_PASSWORD=password
+      - ALLOW_PLAINTEXT_LISTENER=true
+  # kafka2:
+  #   image: 'bitnami/kafka:latest'
+  #   hostname: kafka2
+  #   depends_on:
+  #     - zookeeper
+  #   ports:
+  #     - 9093:9092
+  #   environment:
+  #     - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+  #     - KAFKA_ZOOKEEPER_USER=kafka
+  #     - KAFKA_ZOOKEEPER_PASSWORD=kafka_password
+  #     - KAFKA_INTER_BROKER_USER=interuser
+  #     - KAFKA_INTER_BROKER_PASSWORD=interpassword
+  #     - KAFKA_BROKER_USER=user
+  #     - KAFKA_BROKER_PASSWORD=password
+  #     - ALLOW_PLAINTEXT_LISTENER=true
+networks:
+  default:
+    external:
+      name: local-net
