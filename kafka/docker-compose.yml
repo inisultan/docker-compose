@@ -30,6 +30,8 @@ services:
       - KAFKA_BROKER_PASSWORD=password
       - ALLOW_PLAINTEXT_LISTENER=true
       - KAFKA_CFG_LOG_RETENTION_CHECK_INTERVAL_MS=30000
+      - KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR=3
+
 
   kafka2:
     image: 'bitnami/kafka:latest'
@@ -51,6 +53,7 @@ services:
       - KAFKA_BROKER_PASSWORD=password
       - ALLOW_PLAINTEXT_LISTENER=true
       - KAFKA_CFG_LOG_RETENTION_CHECK_INTERVAL_MS=30000
+      - KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR=3
 
   kafka3:
     image: 'bitnami/kafka:latest'
@@ -72,6 +75,7 @@ services:
       - KAFKA_BROKER_PASSWORD=password
       - ALLOW_PLAINTEXT_LISTENER=true
       - KAFKA_CFG_LOG_RETENTION_CHECK_INTERVAL_MS=30000
+      - KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR=3
 
   demo-service:
     image: 'gcr.io/annular-catfish-250011/tix-demo-service-api-kafka:0.0.1-release'
