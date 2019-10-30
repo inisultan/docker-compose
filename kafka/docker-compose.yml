@@ -17,6 +17,7 @@ services:
       - zookeeper
     ports:
       - 9092:9092
+      - 9997:9997
     environment:
       - KAFKA_CFG_PORT=9092
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
@@ -31,7 +32,9 @@ services:
       - ALLOW_PLAINTEXT_LISTENER=true
       - KAFKA_CFG_LOG_RETENTION_CHECK_INTERVAL_MS=30000
       - KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR=3
-
+      - KAFKA_CFG_JMX_PORT=9998
+      - KAFKA_JMX_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=kafka -Dcom.sun.management.jmxremote.rmi.port=9997
+      - JMX_PORT=9997
 
   kafka2:
     image: 'bitnami/kafka:latest'
@@ -40,6 +43,7 @@ services:
       - zookeeper
     ports:
       - 9093:9093
+      - 9998:9998
     environment:
       - KAFKA_CFG_PORT=9093
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9093
@@ -54,6 +58,8 @@ services:
       - ALLOW_PLAINTEXT_LISTENER=true
       - KAFKA_CFG_LOG_RETENTION_CHECK_INTERVAL_MS=30000
       - KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR=3
+      - KAFKA_JMX_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=kafka2 -Dcom.sun.management.jmxremote.rmi.port=9998
+      - JMX_PORT=9998
 
   kafka3:
     image: 'bitnami/kafka:latest'
@@ -62,6 +68,7 @@ services:
       - zookeeper
     ports:
       - 9094:9094
+      - 9999:9999
     environment:
       - KAFKA_CFG_PORT=9094
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9094
@@ -76,6 +83,8 @@ services:
       - ALLOW_PLAINTEXT_LISTENER=true
       - KAFKA_CFG_LOG_RETENTION_CHECK_INTERVAL_MS=30000
       - KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR=3
+      - KAFKA_JMX_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=kafka3 -Dcom.sun.management.jmxremote.rmi.port=9999
+      - JMX_PORT=9999
 
   demo-service:
     image: 'gcr.io/annular-catfish-250011/tix-demo-service-api-kafka:0.0.1-release'
