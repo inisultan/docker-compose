@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+
+  #MYSQL
+  mysql-master:
+    image: 'bitnami/mysql:5.7'
+    ports:
+      - 3307:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=master_root_password
+      - MYSQL_REPLICATION_MODE=master
+      - MYSQL_REPLICATION_USER=my_repl_user
+      - MYSQL_REPLICATION_PASSWORD=my_repl_password
+      - MYSQL_USER=my_user
+      - MYSQL_PASSWORD=my_password
+      - MYSQL_DATABASE=my_database
+    volumes:
+      - ${LOCAL_PATH}/dockercompose/mysql-master-slave/data:/bitnami/mysql/data
+      - ${LOCAL_PATH}/dockercompose/mysql-master-slave/my_custom.cnf:/opt/bitnami/mysql/conf/my_custom.cnf:ro
+  mysql-slave:
+    image: 'bitnami/mysql:5.7'
+    ports:
+      - 3308-3309:3306
+    depends_on:
+      - mysql-master
+    environment:
+      - MYSQL_REPLICATION_MODE=slave
+      - MYSQL_REPLICATION_USER=my_repl_user
+      - MYSQL_REPLICATION_PASSWORD=my_repl_password
+      - MYSQL_MASTER_HOST=mysql-master
+      - MYSQL_MASTER_PORT_NUMBER=3306
+      - MYSQL_MASTER_ROOT_PASSWORD=master_root_password
+    volumes:
+      - ${LOCAL_PATH}/dockercompose/mysql-master-slave/my_custom.cnf:/opt/bitnami/mysql/conf/my_custom.cnf:ro
+
+  #DEMO SERVICE
+  demo-service:
+    image: 'gcr.io/annular-catfish-250011/${SERVICE}:0.0.1-release'
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql-slave
+    env_file:
+      - ./${DB}.env
+
+
+networks:
+  default:
+    external:
+      name: local-net
